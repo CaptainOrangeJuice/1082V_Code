@@ -174,19 +174,25 @@ void autonomous(void) {
     Brain.Screen.print("Auton 4 (Blue Right) completed.");
 
   } else if (autonNum == 10) {
-    //set up backwards
   
-    InertialSensor.setHeading(0, degrees);
-    clampPneumatics.set(true);
+    InertialSensor.setHeading(0, degrees); //UNCOMMENT 179-183
+    /*clampPneumatics.set(true);
     pid.runPID(-7, 1);
     belt.spin(fwd, 100, pct);
     wait(500, msec);
-    belt.stop(hold);
+    belt.stop(hold);*/
     clampPneumatics.set(false);
     pid.runPID(15,2);
     turnPid.runTurnPID(90);
     pid.runPID(-15,2);
     clampPneumatics.set(true);
+    
+    InertialSensor.calibrate();
+    while (InertialSensor.isCalibrating()) {
+        wait(10, vex::msec);
+    }
+    
+    pid.runPID(-5,2);
     turnPid.runTurnPID(0);
     pid.runPID(11,2);
     belt.spin(fwd, 100, pct);
