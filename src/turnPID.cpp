@@ -77,12 +77,19 @@
         position = 0;
         //InertialSensor.resetHeading();
         target = targetVal;
+
+        bool fixPos = false;
         // std::cout<<position<<std::endl;
         // wait(1, vex::sec);
         if (target > 180) {
             target -= 360;
         } else if (target < -180) {
             target += 360;
+        }
+        if (target = 0) {
+            InertialSensor.setHeading(InertialSensor.heading() + 90, vex::deg);
+            target += 90;
+            fixPos = true;
         }
         while (fabs(target - position) > 7) {
             tpUpdate();
@@ -117,6 +124,9 @@
                 error /= 2;
             }
         } 
+        if (fixPos) {
+            InertialSensor.setHeading(InertialSensor.heading() - 90, vex::deg);
+        }
         Left.stop(vex::brake);
         Right.stop(vex::brake);
         std::cout<<"done :)"<<std::endl;
