@@ -138,3 +138,71 @@
         vex::wait(20, vex::msec);
         
     }
+
+    void turnPID::shake(double seconds/*, vex::motor_group Left, vex::motor_group Right*/)
+    {
+        if (seconds == 0) seconds = 0.5; 
+        double startingPos = InertialSensor.heading();
+        double timeLimit = seconds;
+        int time = 0;
+        // std::cout<<position<<std::endl;
+        position = 0;
+        //InertialSensor.resetHeading();
+        target = 8;
+        // printToConsole("Target: " << target);
+        // printToConsole("Position: " << position);
+        // printToConsole(target - position);
+
+        bool fixPos = false;
+        // std::cout<<position<<std::endl;
+        // wait(1, vex::sec);
+        if (target > 180) {
+            target -= 360;
+        } else if (target < -180) {
+            target += 360;
+        }
+        
+        while (time < timeLimit * 1000) {
+            tpUpdate();
+            // std::cout<<"h"<<std::endl;
+            // std::cout<<position<<std::endl;
+            //spinAll(true, (kp * error) + (ki * i) + (kd * d));
+            Left.spin(vex::forward, ((kp * error) + (ki * i) + (kd * d)) * 24, vex::pct);
+            Right.spin(vex::reverse, ((kp * error) + (ki * i) + (kd * d)) * 24, vex::pct);
+            // tpUpdate();
+
+            if (fabs(position) >= fabs(target / 2)) {
+                // Left.stop(vex::brake);
+                // Right.stop(vex::brake);
+                target *= -1;
+            }
+
+            if (position > 360) {
+                position -= 360;
+            } else if (position < -360) {
+                position += 360;
+            }
+            
+            time += 20;
+            vex::wait(20, vex::msec);
+            if (time >= timeLimit * 1000) {
+                printToConsole("Time Limit Reached for shaking");
+                stopTurnPID();
+                break;
+            }   
+
+            /*if (fabs((kp * error) + (ki * i) + (kd * d)) < 1) {
+                printToConsole("Too slow; saving time");
+                stopTurnPID();
+                break;
+            }*/
+        } 
+        Left.stop(vex::brake);
+        Right.stop(vex::brake);
+        std::cout<<"done shaking"<<std::endl;
+
+        runTurnPID(startingPos);
+
+        vex::wait(20, vex::msec);
+        
+    }

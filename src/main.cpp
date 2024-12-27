@@ -195,24 +195,38 @@ void autonomous(void) {
     
     pid.runPID(-5,2);
     turnPid.runTurnPID(0);
-    belt.spin(fwd, 80, pct);
-    pid.runPID(12,2);
+    belt.spin(fwd, 90, pct);
+    pid.runPID(23,2);
+    turnPid.shake(1);
+    // pid.runPID(9,2);
+    // pid.runPID(-3,1);
     turnPid.runTurnPID(-90);
-    pid.runPID(9,2);
-    pid.runPID(-3,1);
-    turnPid.runTurnPID(-90);
-    pid.runPID(12,2);
-    pid.runPID(8,2);
-    turnPid.runTurnPID(-100);
+    pid.runPID(21,2);
+    turnPid.shake(1);
+
+    turnPid.runTurnPID(180);
     pid.runPID(24,2);
+    turnPid.shake(1);
+
     belt.stop(hold);
-    clampPneumatics.set(false);
-    pid.runPID(7, 2);
-    turnPid.runTurnPID(80);
-    pid.runPID(6,2);
-    spin_for(0.5,belt);
+    spin_for_rev(0.25, belt, 80);
+    belt.spin(fwd, 90, pct);
+    
+    pid.runPID(12,2);
+    turnPid.shake(1);
+
+    belt.stop(hold);
     turnPid.runTurnPID(90);
-    pid.runPID(64,2);    
+    pid.runPID(-12,2);
+    clampPneumatics.set(false);
+    pid.runPID(10, 2);
+    turnPid.runTurnPID(0);
+    pid.runPID(12,2);
+    spin_for(0.5, belt);
+    turnPid.runTurnPID(90);
+    pid.runPID(64,2);
+    //Side 1 complete ^^
+    
     clampPneumatics.set(true);
     belt.spin(fwd, 100, pct);
     turnPid.runTurnPID(180);
