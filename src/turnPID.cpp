@@ -77,6 +77,9 @@
         position = 0;
         //InertialSensor.resetHeading();
         target = targetVal;
+        printToConsole("Target: " << target);
+        printToConsole("Position: " << position);
+        printToConsole(target - position);
 
         bool fixPos = false;
         // std::cout<<position<<std::endl;
@@ -86,11 +89,14 @@
         } else if (target < -180) {
             target += 360;
         }
-        if (target = 0) {
+        if (target == 0) {
             InertialSensor.setHeading(InertialSensor.heading() + 90, vex::deg);
             target += 90;
             fixPos = true;
         }
+        printToConsole("Target: " << target);
+        printToConsole("Position: " << position);
+        printToConsole(target - position);
         while (fabs(target - position) > 7) {
             tpUpdate();
             // std::cout<<"h"<<std::endl;
