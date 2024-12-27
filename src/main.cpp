@@ -175,27 +175,28 @@ void autonomous(void) {
 
   } else if (autonNum == 10) {
   
-    InertialSensor.setHeading(0, degrees); //UNCOMMENT 179-183
+    InertialSensor.setHeading(0, degrees); //UNCOMMENT 179-187
     /*clampPneumatics.set(true);
     pid.runPID(-7, 1);
     belt.spin(fwd, 100, pct);
-    wait(500, msec);
-    belt.stop(hold);*/
+    wait(300, msec);
+    belt.stop(hold);
     clampPneumatics.set(false);
     pid.runPID(15,2);
     turnPid.runTurnPID(90);
-    pid.runPID(-15,2);
+    pid.runPID(-15,2);*/
     clampPneumatics.set(true);
     
     InertialSensor.calibrate();
     while (InertialSensor.isCalibrating()) {
         wait(10, vex::msec);
     }
+    InertialSensor.setHeading(90, deg);
     
     pid.runPID(-5,2);
     turnPid.runTurnPID(0);
-    pid.runPID(11,2);
-    belt.spin(fwd, 100, pct);
+    belt.spin(fwd, 80, pct);
+    pid.runPID(12,2);
     turnPid.runTurnPID(-90);
     pid.runPID(9,2);
     pid.runPID(-3,1);

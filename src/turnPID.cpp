@@ -77,9 +77,9 @@
         position = 0;
         //InertialSensor.resetHeading();
         target = targetVal;
-        printToConsole("Target: " << target);
-        printToConsole("Position: " << position);
-        printToConsole(target - position);
+        // printToConsole("Target: " << target);
+        // printToConsole("Position: " << position);
+        // printToConsole(target - position);
 
         bool fixPos = false;
         // std::cout<<position<<std::endl;
@@ -94,9 +94,7 @@
             target += 90;
             fixPos = true;
         }
-        printToConsole("Target: " << target);
-        printToConsole("Position: " << position);
-        printToConsole(target - position);
+        
         while (fabs(target - position) > 7) {
             tpUpdate();
             // std::cout<<"h"<<std::endl;
