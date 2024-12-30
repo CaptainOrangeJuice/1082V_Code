@@ -148,12 +148,10 @@
         // std::cout<<position<<std::endl;
         position = 0;
         //InertialSensor.resetHeading();
-        target = 8;
+        target = 40;
         // printToConsole("Target: " << target);
         // printToConsole("Position: " << position);
         // printToConsole(target - position);
-
-        bool fixPos = false;
         // std::cout<<position<<std::endl;
         // wait(1, vex::sec);
         if (target > 180) {
@@ -171,7 +169,7 @@
             Right.spin(vex::reverse, ((kp * error) + (ki * i) + (kd * d)) * 24, vex::pct);
             // tpUpdate();
 
-            if (fabs(position) >= fabs(target / 2)) {
+            if (fabs(position) >= fabs(target / 10)) {
                 // Left.stop(vex::brake);
                 // Right.stop(vex::brake);
                 target *= -1;

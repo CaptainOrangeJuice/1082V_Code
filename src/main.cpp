@@ -174,60 +174,63 @@ void autonomous(void) {
     Brain.Screen.print("Auton 4 (Blue Right) completed.");
 
   } else if (autonNum == 10) {
-  
-    InertialSensor.setHeading(0, degrees); //UNCOMMENT 179-187
-    /*clampPneumatics.set(true);
-    pid.runPID(-7, 1);
-    belt.spin(fwd, 100, pct);
-    wait(300, msec);
-    belt.stop(hold);
-    clampPneumatics.set(false);
-    pid.runPID(15,2);
-    turnPid.runTurnPID(90);
-    pid.runPID(-15,2);*/
-    clampPneumatics.set(true);
     
-    InertialSensor.calibrate();
-    while (InertialSensor.isCalibrating()) {
-        wait(10, vex::msec);
+
+    for (int i = 1; i >= -1; i -= 2) {
+      InertialSensor.setHeading(0, degrees); //UNCOMMENT 179-187
+      clampPneumatics.set(true);
+      pid.runPID(-7, 1);
+      belt.spin(fwd, 100, pct);
+      wait(300, msec);
+      belt.stop(hold);
+      clampPneumatics.set(false);
+      pid.runPID(15,2);
+      turnPid.runTurnPID(90 * i);
+      pid.runPID(-15,2);
+      clampPneumatics.set(true);
+      
+      InertialSensor.calibrate();
+      while (InertialSensor.isCalibrating()) {
+          wait(10, vex::msec);
+      }
+      InertialSensor.setHeading(90, deg);
+      
+      pid.runPID(-5,2);
+      turnPid.runTurnPID(0);
+      belt.spin(fwd, 90, pct);
+      pid.runPID(23,2);
+      turnPid.shake(1);
+      // pid.runPID(9,2);
+      // pid.runPID(-3,1);
+      turnPid.runTurnPID(-90 * i);
+      pid.runPID(21,2);
+      turnPid.shake(1);
+
+      turnPid.runTurnPID(180);
+      pid.runPID(24,2);
+      turnPid.shake(1);
+
+      belt.stop(hold);
+      spin_for_rev(0.25, belt, 80);
+      belt.spin(fwd, 90, pct);
+      
+      pid.runPID(12,2);
+      turnPid.shake(1);
+
+      belt.stop(hold);
+      turnPid.runTurnPID(90 * i);
+      pid.runPID(-12,2);
+      clampPneumatics.set(false);
+      pid.runPID(10, 2);
+      turnPid.runTurnPID(0);
+      pid.runPID(12,2);
+      spin_for(0.5, belt);
+      turnPid.runTurnPID(90 * i);
+      pid.runPID(64,2);
+      //Side 1 complete ^^
     }
-    InertialSensor.setHeading(90, deg);
     
-    pid.runPID(-5,2);
-    turnPid.runTurnPID(0);
-    belt.spin(fwd, 90, pct);
-    pid.runPID(23,2);
-    turnPid.shake(1);
-    // pid.runPID(9,2);
-    // pid.runPID(-3,1);
-    turnPid.runTurnPID(-90);
-    pid.runPID(21,2);
-    turnPid.shake(1);
-
-    turnPid.runTurnPID(180);
-    pid.runPID(24,2);
-    turnPid.shake(1);
-
-    belt.stop(hold);
-    spin_for_rev(0.25, belt, 80);
-    belt.spin(fwd, 90, pct);
-    
-    pid.runPID(12,2);
-    turnPid.shake(1);
-
-    belt.stop(hold);
-    turnPid.runTurnPID(90);
-    pid.runPID(-12,2);
-    clampPneumatics.set(false);
-    pid.runPID(10, 2);
-    turnPid.runTurnPID(0);
-    pid.runPID(12,2);
-    spin_for(0.5, belt);
-    turnPid.runTurnPID(90);
-    pid.runPID(64,2);
-    //Side 1 complete ^^
-    
-    clampPneumatics.set(true);
+    /*clampPneumatics.set(true);
     belt.spin(fwd, 100, pct);
     turnPid.runTurnPID(180);
     pid.runPID(12,2);
@@ -237,7 +240,7 @@ void autonomous(void) {
     pid.runPID(16,2);
     belt.stop(hold);
     clampPneumatics.set(false);
-    pid.runPID(8,2);
+    pid.runPID(8,2);*/
 
   } else if (autonNum == 5) {
     pid.runPID(24, 2);
@@ -400,7 +403,7 @@ void usercontrol(void) {
     // This is the main execution loop for the user control program.
     // Each time through the loop your program should update motor + servo
     // values based  on feedback from the joysticks.
-    Left.spin(forward, (Controller1.Axis3.position()+ Controller1.Axis1.position()) * slow * 0.8, pct);
+    Left.spin(forward, (Controller1.Axis3.position() + Controller1.Axis1.position()) * slow * 0.8, pct);
     Right.spin(forward, (Controller1.Axis3.position() - Controller1.Axis1.position()) * slow * 0.8, pct);
 
     /*Brain.screen.print(Controller1.Axis3.position());
