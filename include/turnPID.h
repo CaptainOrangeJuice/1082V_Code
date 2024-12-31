@@ -30,7 +30,7 @@ public:
     void tpUpdate();
     void stopTurnPID();
     void runTurnPID(double targetVal/*, vex::motor_group Left, vex::motor_group Right*/);
-    void shake(double seconds);
+    // void shake(double seconds);
 };
 
 #endif

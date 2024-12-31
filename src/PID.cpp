@@ -2,11 +2,16 @@
 #include "vex.h"
 #include "motors.h"
 #include "PID.h"
+#include "turnPID.h"
 #include <fstream>
 
 //using namespace _PID;
     
     PID::PID() {
+    }
+
+    void PID::setTurnPID(turnPID newTP) {
+        tp = newTP;
     }
 
     void PID::reset()
@@ -122,4 +127,33 @@
         }
         printToConsole("time: " << _time);
         vex::wait(20, vex::msec);
+    }
+
+    void PID::shake(double seconds) {
+        int time = 0;
+        int timeLimit = seconds * 1000; //msec
+        double startPos = InertialSensor.heading();
+        bool isFwd = true;
+        while (time <= timeLimit) {
+            if (isFwd) {
+                Left.spin(vex::forward, 100, vex::pct);
+                Right.spin(vex::forward, 100, vex::pct);
+            } else {
+                Left.spin(vex::reverse, 100, vex::pct);
+                Right.spin(vex::reverse, 100, vex::pct);
+            }
+            wait(200, vex::msec);
+            Left.stop(vex::brake);
+            Right.stop(vex::brake);
+            Left.setStopping(vex::coast);
+            Right.setStopping(vex::coast);
+
+            isFwd = !isFwd;
+            time += 200;
+        }
+        printToConsole("[PID Shake] Done shaking");
+        stopPID();
+        if ((InertialSensor.heading() + 3 <= startPos) || (InertialSensor.heading() - 3 >= startPos)) /*If not in range (3 in either direction) */ {
+            tp.runTurnPID(startPos);
+        }
     }

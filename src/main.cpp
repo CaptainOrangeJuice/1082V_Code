@@ -50,8 +50,10 @@ void pre_auton(void) {
   
   RotationSensor.resetPosition();
 
+  pid.setTurnPID(turnPid);
+
   //Set auton number for each time you upload the program
-  autonNum = 5;
+  autonNum = 10;
 }
 
 void spin_for(double time, motor Motor) {
@@ -90,6 +92,7 @@ void spinTo(double angle) {
 /*---------------------------------------------------------------------------*/
 
 void autonomous(void) {
+  pid.setTurnPID(turnPid);
 
   InertialSensor.calibrate();
   while (InertialSensor.isCalibrating()) {
@@ -199,23 +202,23 @@ void autonomous(void) {
       turnPid.runTurnPID(0);
       belt.spin(fwd, 90, pct);
       pid.runPID(23,2);
-      turnPid.shake(1);
+      pid.shake(1);
       // pid.runPID(9,2);
       // pid.runPID(-3,1);
       turnPid.runTurnPID(-90 * i);
       pid.runPID(21,2);
-      turnPid.shake(1);
+      pid.shake(1);
 
       turnPid.runTurnPID(180);
       pid.runPID(24,2);
-      turnPid.shake(1);
+      pid.shake(1);
 
       belt.stop(hold);
       spin_for_rev(0.25, belt, 80);
       belt.spin(fwd, 90, pct);
       
       pid.runPID(12,2);
-      turnPid.shake(1);
+      pid.shake(1);
 
       belt.stop(hold);
       turnPid.runTurnPID(90 * i);
@@ -245,29 +248,29 @@ void autonomous(void) {
   } else if (autonNum == 5) {
     // pid.runPID(24, 2);
     printToConsole("1 second");
-    turnPid.shake(1);
+    pid.shake(1);
     wait(2, sec);
 
-    printToConsole("2 second");
-    turnPid.shake(2);
-    wait(2, sec);
+    // printToConsole("2 second");
+    // pid.shake(2);
+    // wait(2, sec);
 
-    printToConsole("3 second");
-    turnPid.shake(3);
-    wait(2, sec);
+    // printToConsole("3 second");
+    // pid.shake(3);
+    // wait(2, sec);
     
-    printToConsole("1 second");
-    turnPid.shake(1);
-    wait(2, sec);
+    // printToConsole("1 second");
+    // pid.shake(1);
+    // wait(2, sec);
 
-    printToConsole("2 second");
-    turnPid.shake(2);
-    wait(2, sec);
+    // printToConsole("2 second");
+    // pid.shake(2);
+    // wait(2, sec);
     
-    printToConsole("3 second");
-    turnPid.shake(3);
-    wait(2, sec);
-    printToConsole("done");
+    // printToConsole("3 second");
+    // pid.shake(3);
+    // wait(2, sec);
+    // printToConsole("done");
     
   }
 }

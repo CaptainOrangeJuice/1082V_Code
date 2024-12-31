@@ -2,6 +2,7 @@
 #include "cmath"
 #include "vex.h"
 #include "motors.h"
+#include "turnPID.h"
 
 /*namespace _PID {
     extern double position;
@@ -37,9 +38,12 @@ class PID
     int _time = 1;
     bool errorChanging = true;
     bool stop = false;
+    turnPID tp;
     
 public:
     PID();
+
+    void setTurnPID(turnPID newTP);
 
     void reset();
 
@@ -50,4 +54,6 @@ public:
     void stopPID();
 
     void runPID(double targetVal, double timeLimit);
+
+    void shake(double seconds);
 };

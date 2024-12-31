@@ -37,7 +37,10 @@
 
         
         //std::cout<<abs(target - position)<<std::endl;
-        printToConsole(error);
+
+        // printToConsole(error); // MOST RECENT DEBUG OUTPUT
+
+
         // printToConsole((kp * error) + (ki * i) + (kd * d));
         // std::cout<<error<<std::endl;
 
@@ -139,16 +142,18 @@
         
     }
 
-    void turnPID::shake(double seconds/*, vex::motor_group Left, vex::motor_group Right*/)
+    /*void turnPID::shake(double seconds)
     {
-        if (seconds == 0) seconds = 0.5; 
+        if (seconds == 0) seconds = 1; 
         double startingPos = InertialSensor.heading();
         double timeLimit = seconds;
         int time = 0;
         // std::cout<<position<<std::endl;
         position = 0;
         //InertialSensor.resetHeading();
-        target = 40;
+        // int targetMod = 8;
+        // target = InertialSensor.heading();
+        target = 8;
         // printToConsole("Target: " << target);
         // printToConsole("Position: " << position);
         // printToConsole(target - position);
@@ -161,6 +166,7 @@
         }
         
         while (time < timeLimit * 1000) {
+            // target = InertialSensor.heading() + targetMod;
             tpUpdate();
             // std::cout<<"h"<<std::endl;
             // std::cout<<position<<std::endl;
@@ -168,10 +174,12 @@
             Left.spin(vex::forward, ((kp * error) + (ki * i) + (kd * d)) * 24, vex::pct);
             Right.spin(vex::reverse, ((kp * error) + (ki * i) + (kd * d)) * 24, vex::pct);
             // tpUpdate();
+            // printToConsole(position - startingPos);
 
-            if (fabs(position) >= fabs(target / 10) && (signof(position) == signof(target))) {
+            if (fabs(position) >= fabs(target) && (signof(position) == signof(target))) {
                 // Left.stop(vex::brake);
                 // Right.stop(vex::brake);
+                printToConsole("Reverse");
                 target *= -1;
                 reset();
             }
@@ -190,11 +198,6 @@
                 break;
             }   
 
-            /*if (fabs((kp * error) + (ki * i) + (kd * d)) < 1) {
-                printToConsole("Too slow; saving time");
-                stopTurnPID();
-                break;
-            }*/
         } 
         Left.stop(vex::brake);
         Right.stop(vex::brake);
@@ -204,4 +207,4 @@
 
         vex::wait(20, vex::msec);
         
-    }
+    }*/
