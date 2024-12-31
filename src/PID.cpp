@@ -27,7 +27,9 @@
         position = ((fabs(Left.position(vex::turns)) + fabs(Right.position(vex::turns))) / 2.0) * M_PI * 3.25;
         error = target - position;
 
-        printToConsole(fabs((kp * error) + (ki * i) + (kd * d)));
+        //printToConsole(fabs((kp * error) + (ki * i) + (kd * d)));
+
+        
         //printToConsole(/*"(kp * error) " <<*/ (kp * error));
         // printToConsole("(ki * i) " << (ki * i));
         // printToConsole("(kd * d) " << (kd * d));

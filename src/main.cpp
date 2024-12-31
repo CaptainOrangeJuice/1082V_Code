@@ -51,7 +51,7 @@ void pre_auton(void) {
   RotationSensor.resetPosition();
 
   //Set auton number for each time you upload the program
-  autonNum = 10;
+  autonNum = 5;
 }
 
 void spin_for(double time, motor Motor) {
@@ -176,15 +176,15 @@ void autonomous(void) {
   } else if (autonNum == 10) {
     
 
+    InertialSensor.setHeading(0, degrees); //UNCOMMENT 179-186 and 188
+    clampPneumatics.set(true);
+    pid.runPID(-7, 1);
+    belt.spin(fwd, 100, pct);
+    wait(500, msec);
+    belt.stop(hold);
+    clampPneumatics.set(false);
+    pid.runPID(15,2);
     for (int i = 1; i >= -1; i -= 2) {
-      InertialSensor.setHeading(0, degrees); //UNCOMMENT 179-187
-      clampPneumatics.set(true);
-      pid.runPID(-7, 1);
-      belt.spin(fwd, 100, pct);
-      wait(300, msec);
-      belt.stop(hold);
-      clampPneumatics.set(false);
-      pid.runPID(15,2);
       turnPid.runTurnPID(90 * i);
       pid.runPID(-15,2);
       clampPneumatics.set(true);
@@ -243,10 +243,32 @@ void autonomous(void) {
     pid.runPID(8,2);*/
 
   } else if (autonNum == 5) {
-    pid.runPID(24, 2);
-    turnPid.runTurnPID(60);
-    turnPid.runTurnPID(120);
-    turnPid.runTurnPID(150);
+    // pid.runPID(24, 2);
+    printToConsole("1 second");
+    turnPid.shake(1);
+    wait(2, sec);
+
+    printToConsole("2 second");
+    turnPid.shake(2);
+    wait(2, sec);
+
+    printToConsole("3 second");
+    turnPid.shake(3);
+    wait(2, sec);
+    
+    printToConsole("1 second");
+    turnPid.shake(1);
+    wait(2, sec);
+
+    printToConsole("2 second");
+    turnPid.shake(2);
+    wait(2, sec);
+    
+    printToConsole("3 second");
+    turnPid.shake(3);
+    wait(2, sec);
+    printToConsole("done");
+    
   }
 }
 

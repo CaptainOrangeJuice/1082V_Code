@@ -10,14 +10,14 @@
     turnPID::turnPID() {
     }
 
-    /*void reset(vex::motor_group Left, vex::motor_group Right)
+    void turnPID::reset()
     {
         error = 0;
         prev = 0;
         i = 0;
-        Left.resetPosition();
-        Right.resetPosition();
-    }*/
+        // Left.resetPosition();
+        // Right.resetPosition();
+    }
 
 
     void turnPID::tpUpdate()
@@ -169,10 +169,11 @@
             Right.spin(vex::reverse, ((kp * error) + (ki * i) + (kd * d)) * 24, vex::pct);
             // tpUpdate();
 
-            if (fabs(position) >= fabs(target / 10)) {
+            if (fabs(position) >= fabs(target / 10) && (signof(position) == signof(target))) {
                 // Left.stop(vex::brake);
                 // Right.stop(vex::brake);
                 target *= -1;
+                reset();
             }
 
             if (position > 360) {
@@ -184,7 +185,7 @@
             time += 20;
             vex::wait(20, vex::msec);
             if (time >= timeLimit * 1000) {
-                printToConsole("Time Limit Reached for shaking");
+                printToConsole("[Shaking] Time Limit Reached");
                 stopTurnPID();
                 break;
             }   
