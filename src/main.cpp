@@ -23,6 +23,7 @@ competition Competition;
 PID pid;
 turnPID turnPid;
 int autonNum;
+bool doShake;
 
 /*---------------------------------------------------------------------------*/
 /*                          Pre-Autonomous Functions                         */
@@ -54,6 +55,7 @@ void pre_auton(void) {
 
   //Set auton number for each time you upload the program
   autonNum = 10;
+  doShake = true; //SET TO FALSE TO REMOVE SHAKE IN PROG SKILLS
 }
 
 void spin_for(double time, motor Motor) {
@@ -202,23 +204,23 @@ void autonomous(void) {
       turnPid.runTurnPID(0);
       belt.spin(fwd, 90, pct);
       pid.runPID(23,2);
-      pid.shake(1);
+      if (doShake) pid.shake(1);
       // pid.runPID(9,2);
       // pid.runPID(-3,1);
       turnPid.runTurnPID(-90 * i);
       pid.runPID(21,2);
-      pid.shake(1);
+      if (doShake) pid.shake(1);
 
       turnPid.runTurnPID(180);
       pid.runPID(24,2);
-      pid.shake(1);
+      if (doShake) pid.shake(1);
 
       belt.stop(hold);
       spin_for_rev(0.25, belt, 80);
       belt.spin(fwd, 90, pct);
       
       pid.runPID(12,2);
-      pid.shake(1);
+      if (doShake) pid.shake(1);
 
       belt.stop(hold);
       turnPid.runTurnPID(90 * i);
