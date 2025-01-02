@@ -142,14 +142,14 @@
                 Left.spin(vex::reverse, 100, vex::pct);
                 Right.spin(vex::reverse, 100, vex::pct);
             }
-            wait(200, vex::msec);
+            wait(140, vex::msec);
             Left.stop(vex::brake);
             Right.stop(vex::brake);
             Left.setStopping(vex::coast);
             Right.setStopping(vex::coast);
 
             isFwd = !isFwd;
-            time += 200;
+            time += 140;
         }
         printToConsole("[PID Shake] Done shaking");
         stopPID();

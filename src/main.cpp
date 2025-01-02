@@ -179,17 +179,17 @@ void autonomous(void) {
   } else if (autonNum == 10) {
     
 
-    InertialSensor.setHeading(0, degrees); //UNCOMMENT 179-186 and 188
-    clampPneumatics.set(true);
+    InertialSensor.setHeading(0, degrees); //UNCOMMENT 183-189 and 191-192
+    /*clampPneumatics.set(true);
     pid.runPID(-7, 1);
     belt.spin(fwd, 100, pct);
     wait(500, msec);
     belt.stop(hold);
     clampPneumatics.set(false);
-    pid.runPID(15,2);
+    pid.runPID(15,2);*/
     for (int i = 1; i >= -1; i -= 2) {
-      turnPid.runTurnPID(90 * i);
-      pid.runPID(-15,2);
+      /*turnPid.runTurnPID(90 * i);
+      pid.runPID(-15,2);*/
       clampPneumatics.set(true);
       
       InertialSensor.calibrate();
