@@ -104,11 +104,13 @@ void spinTo(double angle) {
 void autonomous(void) {
   pid.setTurnPID(turnPid);
 
-  InertialSensor.calibrate();
-  while (InertialSensor.isCalibrating()) {
-      wait(10, vex::msec);
+  if (autonNum != 5) {
+    InertialSensor.calibrate();
+    while (InertialSensor.isCalibrating()) {
+        wait(10, vex::msec);
+    }
+    InertialSensor.resetHeading(); 
   }
-  InertialSensor.resetHeading();
 
   wait(1500, msec);
   InertialSensor.setHeading(-120, deg);
