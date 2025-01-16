@@ -98,7 +98,7 @@
             fixPos = true;
         }
         
-        while (fabs(target - position) > 7) {
+        while (fabs(target - position) > 4) {
             tpUpdate();
             // std::cout<<"h"<<std::endl;
             // std::cout<<position<<std::endl;

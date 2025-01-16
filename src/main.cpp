@@ -25,6 +25,14 @@ turnPID turnPid;
 int autonNum;
 bool doShake;
 
+//Reader auton vars
+#define LOOP_DELAY 20 //20 ms per loop
+#define START_MERCY ((1000/LOOP_DELAY) * 0) //How many seconds to remove from the beginning [(1000/LOOP_DELAY) is the number of loops per second]
+#define END_MERCY ((1000/LOOP_DELAY) * 4) //Give extra time? [1 second as of now]
+#define MAX_INPUTS ((1000/LOOP_DELAY) * 20) //1000 for 20 seconds
+#define forward vex::forward
+uint8_t inputs[6][MAX_INPUTS];
+
 /*---------------------------------------------------------------------------*/
 /*                          Pre-Autonomous Functions                         */
 /*                                                                           */
@@ -54,7 +62,7 @@ void pre_auton(void) {
   pid.setTurnPID(turnPid);
 
   //Set auton number for each time you upload the program
-  autonNum = 10;
+  autonNum = 5;
   doShake = true; //SET TO FALSE TO REMOVE SHAKE IN PROG SKILLS
 }
 
@@ -182,16 +190,16 @@ void autonomous(void) {
     
 
     InertialSensor.setHeading(0, degrees); //UNCOMMENT 183-189 and 191-192
-    /*clampPneumatics.set(true);
+    clampPneumatics.set(true);
     pid.runPID(-7, 1);
     belt.spin(fwd, 100, pct);
     wait(500, msec);
     belt.stop(hold);
     clampPneumatics.set(false);
-    pid.runPID(15,2);*/
+    pid.runPID(15,2);
     for (int i = 1; i >= -1; i -= 2) {
-      /*turnPid.runTurnPID(90 * i);
-      pid.runPID(-15,2);*/
+      turnPid.runTurnPID(90 * i);
+      pid.runPID(-15,2);
       clampPneumatics.set(true);
       
       InertialSensor.calibrate();
@@ -202,8 +210,8 @@ void autonomous(void) {
       
       pid.runPID(-5,2);
       turnPid.runTurnPID(0);
-      belt.spin(fwd, 90, pct);
-      pid.runPID(23,2);
+      belt.spin(fwd, 100, pct);
+      pid.runPID(21,2);
       if (doShake) pid.shake(1);
       // pid.runPID(9,2);
       // pid.runPID(-3,1);
@@ -212,7 +220,7 @@ void autonomous(void) {
       if (doShake) pid.shake(1);
 
       turnPid.runTurnPID(180);
-      pid.runPID(24,2);
+      pid.runPID(18,2);
       if (doShake) pid.shake(1);
 
       belt.stop(hold);
@@ -231,7 +239,7 @@ void autonomous(void) {
       pid.runPID(12,2);
       spin_for(0.5, belt);
       turnPid.runTurnPID(90 * i);
-      pid.runPID(64,2);
+      pid.runPID(60,2);
       //Side 1 complete ^^
     }
     
@@ -248,31 +256,35 @@ void autonomous(void) {
     pid.runPID(8,2);*/
 
   } else if (autonNum == 5) {
-    // pid.runPID(24, 2);
-    printToConsole("1 second");
-    pid.shake(1);
-    wait(2, sec);
+    int nRead = Brain.SDcard.loadfile( "1082VAuton.dat", (uint8_t*)inputs, sizeof(inputs));
+  
+    if (nRead == sizeof(inputs)) {
+      
+      for (int i = 0; i < MAX_INPUTS; i++) {
+        if (i <= START_MERCY) {
+          continue;
+        }
+        int8_t fwd = inputs[0][i];
+        int8_t lr = inputs[1][i];
+        int8_t _slow = inputs[2][i];
+        int8_t beltFwd = inputs[3][i];
+        int8_t beltRev = inputs[4][i];
+        int8_t Pneumatics = inputs[5][i];
 
-    // printToConsole("2 second");
-    // pid.shake(2);
-    // wait(2, sec);
+        Left.spin(forward, (fwd + lr) * (_slow / 100) * 0.8, pct);
+        Right.spin(forward, (fwd - lr) * (_slow / 100) * 0.8, pct);
 
-    // printToConsole("3 second");
-    // pid.shake(3);
-    // wait(2, sec);
-    
-    // printToConsole("1 second");
-    // pid.shake(1);
-    // wait(2, sec);
+        if (beltFwd) belt.spin(forward, 100, pct);
+        else if (beltRev) belt.spin(reverse, 100, pct);
+        else belt.stop(brake);
 
-    // printToConsole("2 second");
-    // pid.shake(2);
-    // wait(2, sec);
-    
-    // printToConsole("3 second");
-    // pid.shake(3);
-    // wait(2, sec);
-    // printToConsole("done");
+        if (Pneumatics != inputs[5][i-1]) {
+          clampPneumatics.set(Pneumatics);
+        }
+
+        wait(LOOP_DELAY, msec);
+      }
+    } else { printToConsole("Load failed!"); Controller1.Screen.print("Load failed!"); }
     
   }
 }
@@ -302,6 +314,7 @@ void usercontrol(void) {
   int time2 = 0;
   bool runTime = false;
   bool runTime2 = false;
+  bool doinker = false;
   RotationSensor.resetPosition();
   manlySilverArm.resetPosition();
 
@@ -441,7 +454,15 @@ void usercontrol(void) {
     //Bl.spin(forward, Controller1.Axis3.position() + Controller1.Axis1.position(), pct);
     //Br.spin(forward, Controller1.Axis3.position() - Controller1.Axis1.position(), pct);
     
-    
+    if (Controller1.ButtonX.pressing()) {
+      if (doinker == false) {
+        doinkerPneumatics.set(true);
+        doinker = true;
+      } else {
+        doinkerPneumatics.set(false);
+        doinker = false;
+      }
+    }
 
     if (Controller1.ButtonDown.pressing()) {
       //from the screen

@@ -19,6 +19,7 @@ inline extern vex::motor manlySilverArmL = vex::motor(vex::PORT16, vex::ratio36_
 inline extern vex::motor manlySilverArmR = vex::motor(vex::PORT13, vex::ratio36_1, false);
 inline extern vex::motor_group manlySilverArm = vex::motor_group(manlySilverArmL, manlySilverArmR); //Not the lady brown frfr
 inline extern vex::digital_out clampPneumatics = vex::digital_out(Brain.ThreeWirePort.H);
+inline extern vex::digital_out doinkerPneumatics = vex::digital_out(Brain.ThreeWirePort.A);
 inline extern vex::controller Controller1 = vex::controller(vex::primary);
 inline extern vex::motor_group Left = vex::motor_group(Fl, Tl, Bl);
 inline extern vex::motor_group Right = vex::motor_group(Fr, Tr, Br);
