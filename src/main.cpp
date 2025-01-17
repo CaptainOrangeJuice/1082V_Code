@@ -63,7 +63,7 @@ void pre_auton(void) {
   pid.setTurnPID(turnPid);
 
   //Set auton number for each time you upload the program
-  autonNum = 5;
+  autonNum = 1;
   reader = true;
   doShake = true; //SET TO FALSE TO REMOVE SHAKE IN PROG SKILLS
 }
