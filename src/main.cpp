@@ -23,6 +23,7 @@ competition Competition;
 PID pid;
 turnPID turnPid;
 int autonNum;
+bool reader;
 bool doShake;
 
 //Reader auton vars
@@ -63,6 +64,7 @@ void pre_auton(void) {
 
   //Set auton number for each time you upload the program
   autonNum = 5;
+  reader = true;
   doShake = true; //SET TO FALSE TO REMOVE SHAKE IN PROG SKILLS
 }
 
@@ -103,6 +105,130 @@ void spinTo(double angle) {
 
 void autonomous(void) {
   pid.setTurnPID(turnPid);
+
+  if (reader) {
+    if (autonNum == 1) {
+      int nRead = Brain.SDcard.loadfile( "V_RED_LEFT.dat", (uint8_t*)inputs, sizeof(inputs));
+    
+      if (nRead == sizeof(inputs)) {
+        
+        for (int i = 0; i < MAX_INPUTS; i++) {
+          if (i <= START_MERCY) {
+            continue;
+          }
+          int8_t fwd = inputs[0][i];
+          int8_t lr = inputs[1][i];
+          int8_t _slow = inputs[2][i];
+          int8_t beltFwd = inputs[3][i];
+          int8_t beltRev = inputs[4][i];
+          int8_t Pneumatics = inputs[5][i];
+
+          Left.spin(forward, (fwd + lr) * (_slow / 100) * 0.7, pct);
+          Right.spin(forward, (fwd - lr) * (_slow / 100) * 0.7, pct);
+
+          if (beltFwd) belt.spin(forward, 100, pct);
+          else if (beltRev) belt.spin(reverse, 100, pct);
+          else belt.stop(brake);
+
+          if (Pneumatics != inputs[5][i-1]) {
+            clampPneumatics.set(Pneumatics);
+          }
+
+          wait(LOOP_DELAY, msec);
+        }
+      } else { printToConsole("Load failed!"); Controller1.Screen.print("Load failed!"); }
+    } else if (autonNum == 2) {
+      int nRead = Brain.SDcard.loadfile( "V_RED_RIGHT.dat", (uint8_t*)inputs, sizeof(inputs));
+    
+      if (nRead == sizeof(inputs)) {
+        
+        for (int i = 0; i < MAX_INPUTS; i++) {
+          if (i <= START_MERCY) {
+            continue;
+          }
+          int8_t fwd = inputs[0][i];
+          int8_t lr = inputs[1][i];
+          int8_t _slow = inputs[2][i];
+          int8_t beltFwd = inputs[3][i];
+          int8_t beltRev = inputs[4][i];
+          int8_t Pneumatics = inputs[5][i];
+
+          Left.spin(forward, (fwd + lr) * (_slow / 100) * 0.7, pct);
+          Right.spin(forward, (fwd - lr) * (_slow / 100) * 0.7, pct);
+
+          if (beltFwd) belt.spin(forward, 100, pct);
+          else if (beltRev) belt.spin(reverse, 100, pct);
+          else belt.stop(brake);
+
+          if (Pneumatics != inputs[5][i-1]) {
+            clampPneumatics.set(Pneumatics);
+          }
+
+          wait(LOOP_DELAY, msec);
+        }
+      } else { printToConsole("Load failed!"); Controller1.Screen.print("Load failed!"); }
+    } else if (autonNum == 1) {
+      int nRead = Brain.SDcard.loadfile( "V_BLUE_LEFT.dat", (uint8_t*)inputs, sizeof(inputs));
+    
+      if (nRead == sizeof(inputs)) {
+        
+        for (int i = 0; i < MAX_INPUTS; i++) {
+          if (i <= START_MERCY) {
+            continue;
+          }
+          int8_t fwd = inputs[0][i];
+          int8_t lr = inputs[1][i];
+          int8_t _slow = inputs[2][i];
+          int8_t beltFwd = inputs[3][i];
+          int8_t beltRev = inputs[4][i];
+          int8_t Pneumatics = inputs[5][i];
+
+          Left.spin(forward, (fwd + lr) * (_slow / 100) * 0.7, pct);
+          Right.spin(forward, (fwd - lr) * (_slow / 100) * 0.7, pct);
+
+          if (beltFwd) belt.spin(forward, 100, pct);
+          else if (beltRev) belt.spin(reverse, 100, pct);
+          else belt.stop(brake);
+
+          if (Pneumatics != inputs[5][i-1]) {
+            clampPneumatics.set(Pneumatics);
+          }
+
+          wait(LOOP_DELAY, msec);
+        }
+      } else { printToConsole("Load failed!"); Controller1.Screen.print("Load failed!"); }
+    } else if (autonNum == 1) {
+      int nRead = Brain.SDcard.loadfile( "V_BLUE_RIGHT.dat", (uint8_t*)inputs, sizeof(inputs));
+    
+      if (nRead == sizeof(inputs)) {
+        
+        for (int i = 0; i < MAX_INPUTS; i++) {
+          if (i <= START_MERCY) {
+            continue;
+          }
+          int8_t fwd = inputs[0][i];
+          int8_t lr = inputs[1][i];
+          int8_t _slow = inputs[2][i];
+          int8_t beltFwd = inputs[3][i];
+          int8_t beltRev = inputs[4][i];
+          int8_t Pneumatics = inputs[5][i];
+
+          Left.spin(forward, (fwd + lr) * (_slow / 100) * 0.7, pct);
+          Right.spin(forward, (fwd - lr) * (_slow / 100) * 0.7, pct);
+
+          if (beltFwd) belt.spin(forward, 100, pct);
+          else if (beltRev) belt.spin(reverse, 100, pct);
+          else belt.stop(brake);
+
+          if (Pneumatics != inputs[5][i-1]) {
+            clampPneumatics.set(Pneumatics);
+          }
+
+          wait(LOOP_DELAY, msec);
+        }
+      } else { printToConsole("Load failed!"); Controller1.Screen.print("Load failed!"); }
+    }
+  }
 
   if (autonNum != 5) {
     InertialSensor.calibrate();
@@ -258,35 +384,6 @@ void autonomous(void) {
     pid.runPID(8,2);*/
 
   } else if (autonNum == 5) {
-    int nRead = Brain.SDcard.loadfile( "1082VAuton.dat", (uint8_t*)inputs, sizeof(inputs));
-  
-    if (nRead == sizeof(inputs)) {
-      
-      for (int i = 0; i < MAX_INPUTS; i++) {
-        if (i <= START_MERCY) {
-          continue;
-        }
-        int8_t fwd = inputs[0][i];
-        int8_t lr = inputs[1][i];
-        int8_t _slow = inputs[2][i];
-        int8_t beltFwd = inputs[3][i];
-        int8_t beltRev = inputs[4][i];
-        int8_t Pneumatics = inputs[5][i];
-
-        Left.spin(forward, (fwd + lr) * (_slow / 100) * 0.7, pct);
-        Right.spin(forward, (fwd - lr) * (_slow / 100) * 0.7, pct);
-
-        if (beltFwd) belt.spin(forward, 100, pct);
-        else if (beltRev) belt.spin(reverse, 100, pct);
-        else belt.stop(brake);
-
-        if (Pneumatics != inputs[5][i-1]) {
-          clampPneumatics.set(Pneumatics);
-        }
-
-        wait(LOOP_DELAY, msec);
-      }
-    } else { printToConsole("Load failed!"); Controller1.Screen.print("Load failed!"); }
     
   }
 }
