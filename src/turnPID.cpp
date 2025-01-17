@@ -103,8 +103,8 @@
             // std::cout<<"h"<<std::endl;
             // std::cout<<position<<std::endl;
             //spinAll(true, (kp * error) + (ki * i) + (kd * d));
-            Left.spin(vex::forward, ((kp * error) + (ki * i) + (kd * d)) * 0.5, vex::pct);
-            Right.spin(vex::reverse, ((kp * error) + (ki * i) + (kd * d)) * 0.5, vex::pct);
+            Left.spin(vex::forward, ((kp * error) + (ki * i) + (kd * d)) * 0.3, vex::pct);
+            Right.spin(vex::reverse, ((kp * error) + (ki * i) + (kd * d)) * 0.3, vex::pct);
             // tpUpdate();
 
             if (position > 360) {

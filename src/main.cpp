@@ -273,8 +273,8 @@ void autonomous(void) {
         int8_t beltRev = inputs[4][i];
         int8_t Pneumatics = inputs[5][i];
 
-        Left.spin(forward, (fwd + lr) * (_slow / 100) * 0.8, pct);
-        Right.spin(forward, (fwd - lr) * (_slow / 100) * 0.8, pct);
+        Left.spin(forward, (fwd + lr) * (_slow / 100) * 0.7, pct);
+        Right.spin(forward, (fwd - lr) * (_slow / 100) * 0.7, pct);
 
         if (beltFwd) belt.spin(forward, 100, pct);
         else if (beltRev) belt.spin(reverse, 100, pct);
