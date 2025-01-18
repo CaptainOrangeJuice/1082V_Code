@@ -230,13 +230,11 @@ void autonomous(void) {
     }
   }
 
-  if (autonNum != 5) {
-    InertialSensor.calibrate();
-    while (InertialSensor.isCalibrating()) {
-        wait(10, vex::msec);
-    }
-    InertialSensor.resetHeading(); 
+  InertialSensor.calibrate();
+  while (InertialSensor.isCalibrating()) {
+      wait(10, vex::msec);
   }
+  InertialSensor.resetHeading(); 
 
   wait(1500, msec);
   InertialSensor.setHeading(-120, deg);
