@@ -56,4 +56,6 @@ public:
     void runPID(double targetVal, double timeLimit);
 
     void shake(double seconds);
+
+    void bigShake(double seconds);
 };
